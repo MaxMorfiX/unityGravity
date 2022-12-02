@@ -8,7 +8,8 @@ public class Ball : MonoBehaviour {
     public static Ball holdedBall;
     public static bool isSomeBallHolded;
 
-    static public float multForFingerForce = 200f;
+    public static float multForFingerForce = 200f;
+    public static float forceDiffMagnitudeLimiter = 0.5f;
 
     static Vector2 recentTouchPos;
 
@@ -66,11 +67,21 @@ public class Ball : MonoBehaviour {
     }
 
     Vector2 CalcAttractToBall(Ball ball) {
+
         Vector2 diff = ball.transform.position - transform.position;
+
+
+        if(diff.magnitude < forceDiffMagnitudeLimiter) {
+            float ang = Mathf.Atan(diff.y/diff.x);
+
+            diff.x = Convert.ToSingle(Math.Cos(ang)*forceDiffMagnitudeLimiter);
+            diff.y = Convert.ToSingle(Math.Sin(ang)*forceDiffMagnitudeLimiter);
+
+        }
 
         Vector2 force = diff*G*ball.rb.mass;
 
-        force /= diff.magnitude*diff.magnitude;
+        force /= diff.sqrMagnitude;
 
         return force;
     }

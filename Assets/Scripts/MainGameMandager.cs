@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class MainGameMandager : MonoBehaviour {
 
     bool isGamePaused = false;
+
     [SerializeField] Transform ballsContainer;
     [SerializeField] GameObject ballPrefab;
     [SerializeField] TrajectoryRenderer trajectoryRenderer;
@@ -17,6 +18,9 @@ public class MainGameMandager : MonoBehaviour {
 
     [SerializeField] Sprite pauseButtonSprite;
     [SerializeField] Sprite resumeButtonSprite;
+    
+    [SerializeField] Text ToggleBallsCollisionsButtonText;
+    [SerializeField] Text ToggleBordersButtonText;
 
     private void Update() {}
 
@@ -77,5 +81,25 @@ public class MainGameMandager : MonoBehaviour {
 
     public void AddRandomBallVoid() {
         AddRandomBall();
+    }
+
+    public void ToggleBounds() {
+        SettingsManager.ToggleLayerCollision(8, 9);
+
+        if(SettingsManager.GetLayerCollision(8,9)) {
+            ToggleBordersButtonText.text = "Disable Borders";
+        } else {
+            ToggleBordersButtonText.text = "Enable Borders";
+        }
+    }
+
+    public void ToggleBallsCollisions() {
+        SettingsManager.ToggleLayerCollision(9, 9);
+
+        if(SettingsManager.GetLayerCollision(9, 9)) {
+            ToggleBallsCollisionsButtonText.text = "Disable Ball Collisions";
+        } else {
+            ToggleBallsCollisionsButtonText.text = "Enable Ball Collisions";
+        }
     }
 }

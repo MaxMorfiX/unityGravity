@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7596633207014558423}
   - component: {fileID: 7596633207014558422}
   - component: {fileID: 7596633207014558421}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,3 +138,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 0}
   tr: {fileID: 0}
+  rb: {fileID: 0}
