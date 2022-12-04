@@ -9,10 +9,11 @@ public class Ball : MonoBehaviour {
     public static bool isSomeBallHolded;
 
     public static float multForFingerForce = 200f;
-    public static float forceDiffMagnitudeLimiter = 0.5f;
+    public static float forceDiffMagnitudeLimiter = 1f;
 
-    static Vector2 recentTouchPos;
+    private static Vector2 recentTouchPos;
 
+    [SerializeField] FixedJoystick joystick;
     [SerializeField] Camera camera;
     [SerializeField] TrajectoryRenderer tr;
 
@@ -22,7 +23,7 @@ public class Ball : MonoBehaviour {
 
     bool isPosLocked = false;
 
-    public Rigidbody2D rb;
+    [HideInInspector] public Rigidbody2D rb;
     private LineRenderer lr;
     private Transform transform;
     private Collider2D collider;
@@ -40,7 +41,7 @@ public class Ball : MonoBehaviour {
                 if(!isPosLocked) rb.constraints = RigidbodyConstraints2D.None;
                 rb.AddForce(calcForceByFinger());
             }
-        } else if(!isSomeBallHolded && Input.touchCount >= 1) {
+        } else if(!isSomeBallHolded && Input.touchCount >= 1 && !joystick.isHolded) {
             Vector2 touchPos = camera.ScreenToWorldPoint(Input.GetTouch(0).position);
             if(collider.bounds.Contains(touchPos)) {
                 isSomeBallHolded = true;
@@ -71,7 +72,7 @@ public class Ball : MonoBehaviour {
         Vector2 diff = ball.transform.position - transform.position;
 
 
-        if(diff.magnitude < forceDiffMagnitudeLimiter) {
+        if(diff.magnitude < transform.localScale.x*forceDiffMagnitudeLimiter) {
             float ang = Mathf.Atan(diff.y/diff.x);
 
             diff.x = Convert.ToSingle(Math.Cos(ang)*forceDiffMagnitudeLimiter);
@@ -112,9 +113,10 @@ public class Ball : MonoBehaviour {
         return force;
     }
 
-    public void SetValues(Camera cam, TrajectoryRenderer tr) {
+    public void SetValues(Camera cam, TrajectoryRenderer tr, FixedJoystick joystick) {
         this.camera = cam;
         this.tr = tr;
+        this.joystick = joystick;
     }
 
     public void SetRandomValues(bool mass, string size, bool pos, bool vel) {
@@ -132,9 +134,12 @@ public class Ball : MonoBehaviour {
         }
 
         if(pos) {
-            Vector2 position = new Vector2(UnityEngine.Random.Range(-10f, 10f), UnityEngine.Random.Range(-10f, 10f));
-            Debug.Log(position);
-            transform.position = position;
+            Debug.Log("before" + transform.position);
+            Vector3 position = new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f), 0);
+            float camZoom = camera.GetComponent<CameraController>().zoom;
+            position *= camZoom;
+            transform.position += position;
+            Debug.Log(transform.position);
         }
 
         if(vel) {

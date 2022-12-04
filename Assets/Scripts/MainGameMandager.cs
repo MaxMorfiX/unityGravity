@@ -8,6 +8,9 @@ public class MainGameMandager : MonoBehaviour {
 
     bool isGamePaused = false;
 
+    [SerializeField] GameObject lastHoldedBallEditorGameObject;
+    [SerializeField] GameObject cameraControlGameObject;
+    [SerializeField] FixedJoystick joystick;
     [SerializeField] Transform ballsContainer;
     [SerializeField] GameObject ballPrefab;
     [SerializeField] TrajectoryRenderer trajectoryRenderer;
@@ -22,7 +25,16 @@ public class MainGameMandager : MonoBehaviour {
     [SerializeField] Text ToggleBallsCollisionsButtonText;
     [SerializeField] Text ToggleBordersButtonText;
 
-    private void Update() {}
+    private void Start() {
+        FitToSize();
+    }
+    public void FitToSize() {
+        float screenWidth = Screen.width;
+        float screenHeight = Screen.height;
+
+        lastHoldedBallEditorGameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(screenWidth, screenHeight);
+        cameraControlGameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(screenWidth, screenHeight);
+    }
 
     public void ToggleGamePause() {
         isGamePaused = !isGamePaused;
@@ -67,7 +79,10 @@ public class MainGameMandager : MonoBehaviour {
         GameObject ball = Instantiate(ballPrefab, ballsContainer);
 
         ball.transform.SetParent(ballsContainer);
-        ball.GetComponent<Ball>().SetValues(camera, trajectoryRenderer);
+        ball.GetComponent<Ball>().SetValues(camera, trajectoryRenderer, joystick);
+
+        Vector3 camPos = camera.GetComponent<Transform>().position;
+        ball.GetComponent<Transform>().position = new Vector3(camPos.x, camPos.y, 0);
 
         return ball;
     }
@@ -89,7 +104,7 @@ public class MainGameMandager : MonoBehaviour {
         if(SettingsManager.GetLayerCollision(8,9)) {
             ToggleBordersButtonText.text = "Disable Borders";
         } else {
-            ToggleBordersButtonText.text = "Enable Borders";
+            ToggleBordersButtonText.text = "Enable Borders (beta)";
         }
     }
 
