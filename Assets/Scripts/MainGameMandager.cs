@@ -7,8 +7,9 @@ using UnityEngine.UI;
 public class MainGameMandager : MonoBehaviour {
 
     bool isGamePaused = false;
+    bool isLastHoldedBallFollowed = false;
 
-    [SerializeField] GameObject lastHoldedBallEditorGameObject;
+    public GameObject lastHoldedBallEditorGameObject;
     [SerializeField] GameObject cameraControlGameObject;
     [SerializeField] FixedJoystick joystick;
     [SerializeField] Transform ballsContainer;
@@ -24,6 +25,7 @@ public class MainGameMandager : MonoBehaviour {
     
     [SerializeField] Text ToggleBallsCollisionsButtonText;
     [SerializeField] Text ToggleBordersButtonText;
+    [SerializeField] Text ToggleFollowByLastHoldedBallButtonText;
 
     private void Start() {
         FitToSize();
@@ -117,4 +119,6 @@ public class MainGameMandager : MonoBehaviour {
             ToggleBallsCollisionsButtonText.text = "Enable Ball Collisions";
         }
     }
+    
+    
 }

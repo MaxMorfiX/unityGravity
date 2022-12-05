@@ -38,7 +38,7 @@ public class Ball : MonoBehaviour {
             if(Input.touchCount < 1) {
                 isSomeBallHolded = false;
                 tr.ClearTrajectory();
-                if(!isPosLocked) rb.constraints = RigidbodyConstraints2D.None;
+                if(!isPosLocked) rb.constraints = RigidbodyConstraints2D.FreezeRotation;
                 rb.AddForce(calcForceByFinger());
             }
         } else if(!isSomeBallHolded && Input.touchCount >= 1 && !joystick.isHolded) {
@@ -47,7 +47,7 @@ public class Ball : MonoBehaviour {
                 isSomeBallHolded = true;
                 holdedBall = this;
 
-                rb.constraints = RigidbodyConstraints2D.FreezePosition;
+                rb.constraints = RigidbodyConstraints2D.FreezeAll;
               }
         }
 
@@ -163,8 +163,8 @@ public class Ball : MonoBehaviour {
     public void SetPosLocking(bool val) {
         isPosLocked = val;
 
-        if(val) rb.constraints = RigidbodyConstraints2D.FreezePosition;
-        else if(!val) rb.constraints = RigidbodyConstraints2D.None;
+        if(val) rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        else if(!val) rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     public bool IsPosLocked() {

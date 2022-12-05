@@ -11,9 +11,10 @@ public class LastHoldedBallEditor : MonoBehaviour {
     Text LastHoldedBallNameText;
     Text LastHoldedBallMassText;
 
+    public GameObject LastHoldedBallNameGameObject;
     [SerializeField] GameObject AddHoldMassButton;
+    [SerializeField] GameObject ToggleFollowByLastHoldedBallButton;
     [SerializeField] GameObject ReduceHoldMassButton;
-    [SerializeField] GameObject LastHoldedBallNameGameObject;
     [SerializeField] GameObject LastHoldedBallMassGameObject;
     [SerializeField] GameObject AddMassButton;
     [SerializeField] GameObject ReduceMassButton;
@@ -21,7 +22,7 @@ public class LastHoldedBallEditor : MonoBehaviour {
 
     [SerializeField] Text TogglePosLockingButtonText;
 
-    Ball currBall;
+    public Ball currBall;
     Ball recentFrameBall;
 
     private void Update() {
@@ -55,6 +56,7 @@ public class LastHoldedBallEditor : MonoBehaviour {
 
     public void ShowEditor() {
         ReduceMassButton.SetActive(true);
+        ToggleFollowByLastHoldedBallButton.SetActive(true);
         AddMassButton.SetActive(true);
         ReduceHoldMassButton.SetActive(true);
         AddHoldMassButton.SetActive(true);
@@ -65,6 +67,7 @@ public class LastHoldedBallEditor : MonoBehaviour {
 
     public void HideEditor() {
         ReduceMassButton.SetActive(false);
+        ToggleFollowByLastHoldedBallButton.SetActive(false);
         AddMassButton.SetActive(false);
         ReduceHoldMassButton.SetActive(false);
         AddHoldMassButton.SetActive(false);
