@@ -4,10 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class LastHoldedBallEditor : MonoBehaviour {
+
+    public float massChangeSpeed = 0.01f;
+    private float currMassChangeSpeed = 0f;
     
     Text LastHoldedBallNameText;
     Text LastHoldedBallMassText;
 
+    [SerializeField] GameObject AddHoldMassButton;
+    [SerializeField] GameObject ReduceHoldMassButton;
     [SerializeField] GameObject LastHoldedBallNameGameObject;
     [SerializeField] GameObject LastHoldedBallMassGameObject;
     [SerializeField] GameObject AddMassButton;
@@ -37,6 +42,8 @@ public class LastHoldedBallEditor : MonoBehaviour {
         LastHoldedBallNameText.text = "" + currBall.name;
         LastHoldedBallMassText.text = "Mass: " + currBall.rb.mass;
 
+        AddMass(currMassChangeSpeed*currBall.rb.mass);
+
     }
 
     private void Start() {
@@ -49,6 +56,8 @@ public class LastHoldedBallEditor : MonoBehaviour {
     public void ShowEditor() {
         ReduceMassButton.SetActive(true);
         AddMassButton.SetActive(true);
+        ReduceHoldMassButton.SetActive(true);
+        AddHoldMassButton.SetActive(true);
         LastHoldedBallNameGameObject.SetActive(true);
         LastHoldedBallMassGameObject.SetActive(true);
         TogglePosLockingButton.SetActive(true);
@@ -57,12 +66,15 @@ public class LastHoldedBallEditor : MonoBehaviour {
     public void HideEditor() {
         ReduceMassButton.SetActive(false);
         AddMassButton.SetActive(false);
+        ReduceHoldMassButton.SetActive(false);
+        AddHoldMassButton.SetActive(false);
         LastHoldedBallNameGameObject.SetActive(false);
         LastHoldedBallMassGameObject.SetActive(false);
         TogglePosLockingButton.SetActive(false);
     }
 
     public void AddMass(float val) {
+        if(currBall.rb.mass + val < 0.01) return;
         currBall.rb.mass += val;
     }
 
@@ -84,4 +96,19 @@ public class LastHoldedBallEditor : MonoBehaviour {
         TogglePosLockingButtonText.text = "Lock pos";
     }
 
+    public void OnMassButton(string buttonType, bool pressedDown) {
+        float totalAddMass = massChangeSpeed;
+
+        if(buttonType == "-") totalAddMass = -totalAddMass;
+        if(!pressedDown) totalAddMass = -totalAddMass;
+
+        currMassChangeSpeed += totalAddMass;
+    }
+
+    public void OnMassButtonDown(string buttonType) {
+        OnMassButton(buttonType, true);
+    }
+    public void OnMassButtonUp(string buttonType) {
+        OnMassButton(buttonType, false);
+    }
 }
