@@ -30,6 +30,11 @@ public class MainGameMandager : MonoBehaviour {
     private void Start() {
         FitToSize();
     }
+
+    private void Update() {
+        if(Input.GetKeyDown(KeyCode.Escape)) ToggleGamePause();
+    }
+
     public void FitToSize() {
         float screenWidth = Screen.width;
         float screenHeight = Screen.height;
