@@ -32,11 +32,29 @@ public class CameraController : MonoBehaviour {
 
     private void Update() {
         Vector3 moveVec = new Vector3(joystick.Horizontal, joystick.Vertical, 0);
+        moveVec.x += Input.GetAxis("Horizontal");
+        moveVec.y += Input.GetAxis("Vertical");
+
         moveVec *= Time.deltaTime*moveSpeed*zoom;
         transform.position += moveVec;
         boundsTransform.position += moveVec;
 
-        zoom += currZoomChangeSpeed*zoom;
+
+
+
+        float currZoom = zoom;
+
+        if(Input.GetKeyDown("z")) OnZoomButtonDown("+");
+        if(Input.GetKeyDown("x")) OnZoomButtonDown("-");
+        if(Input.GetKeyUp("z")) OnZoomButtonUp("+");
+        if(Input.GetKeyUp("x")) OnZoomButtonUp("-");
+
+        zoom += currZoomChangeSpeed*currZoom;
+
+
+
+
+        if(Input.GetKeyDown("f")) ToggleFollowByLastHoldedBall();
     }
 
     public void OnZoomButton(string buttonType, bool pressedDown) {

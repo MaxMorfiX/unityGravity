@@ -7,7 +7,7 @@
         {
             "name": "Unity Editor",
             "type": "unity",
-            "path": "/d:/programming/Unity/some/Library/EditorInstance.json",
+            "path": "/d:/programming/Unity/unityGravity/Library/EditorInstance.json",
             "request": "launch"
         },
         {
