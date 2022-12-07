@@ -30,19 +30,25 @@ public class Ball : MonoBehaviour {
 
     private void FixedUpdate() {
 
+        bool isFingerDown = (Input.touchCount > 0) || Input.GetMouseButton(0);
+
         if(Input.touchCount > 0) recentTouchPos = camera.ScreenToWorldPoint(Input.GetTouch(0).position);
+        else if(Input.GetMouseButton(0)) recentTouchPos = camera.ScreenToWorldPoint(Input.mousePosition);
 
         if(isSomeBallHolded && holdedBall == this) {            
             tr.DrawTrajectory(this, recentTouchPos);
 
-            if(Input.touchCount < 1) {
+            if(!isFingerDown) {
                 isSomeBallHolded = false;
                 tr.ClearTrajectory();
                 if(!isPosLocked) rb.constraints = RigidbodyConstraints2D.FreezeRotation;
                 rb.AddForce(calcForceByFinger());
             }
-        } else if(!isSomeBallHolded && Input.touchCount >= 1 && !joystick.isHolded) {
-            Vector2 touchPos = camera.ScreenToWorldPoint(Input.GetTouch(0).position);
+        } else if(!isSomeBallHolded && isFingerDown && !joystick.isHolded) {
+            Vector2 touchPos = new Vector2();
+            if(Input.touchCount > 0) touchPos = camera.ScreenToWorldPoint(Input.GetTouch(0).position);
+            else touchPos = camera.ScreenToWorldPoint(Input.mousePosition);
+
             if(collider.bounds.Contains(touchPos)) {
                 isSomeBallHolded = true;
                 holdedBall = this;
